@@ -1,7 +1,31 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [Values, setValues] = useState({
+    email: "",
+    password: "",
+  });
+  const change = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...Values, [name]: value });
+  };
+  const login = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/v1/login",
+        Values,
+        { withCredentials: true }
+      );
+      alert(res.data.success);
+      navigate("/login");
+    } catch (error) {
+      alert(error.response.data.error);
+    }
+  };
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <div className="w-[60vw] md:w-[50vw] lg:w-[30vw]">
@@ -20,6 +44,8 @@ const Login = () => {
             placeholder="email"
             className="border rounded px-4 py-1 border-zinc-400 w-[100%] outline-none"
             name="email"
+            value={Values.email}
+            onChange={change}
           />
           <input
             type="password"
@@ -27,8 +53,13 @@ const Login = () => {
             placeholder="password"
             className="border rounded px-4 py-1 border-zinc-400 w-[100%] outline-none"
             name="password"
+            value={Values.password}
+            onChange={change}
           />
-          <button className="bg-blue-800 text-white font-semibold py-2 rounded hover:bg-blue-700 transition-all duration-300">
+          <button
+            className="bg-blue-800 text-white font-semibold py-2 rounded hover:bg-blue-700 transition-all duration-300"
+            onClick={login}
+          >
             Submit
           </button>
           <p className="text-center font-semibold text-gray-900">

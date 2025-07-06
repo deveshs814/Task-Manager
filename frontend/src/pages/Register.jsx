@@ -17,7 +17,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/v1/register",
+        "http://localhost:/api/v1/register",
         Values,
       );
       alert(res.data.success);

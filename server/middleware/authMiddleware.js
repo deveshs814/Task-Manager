@@ -1,23 +1,29 @@
 const jwt = require("jsonwebtoken");
-const user = require("../models/user");
+const User = require("../models/user");
 
-const authMiddleware  = async(req,resizeBy,next)  =>{
+const authMiddleware = async (req, res, next) => {
+  try {
+    console.log("Cookies:", req.cookies);
     const token = req.cookies.taskifyUserToken;
-    try {
-        if(!token){
-            return res.status(401).json({error : "new-user"});
-        }
-        const decoded = jwt.verify(token,process.env.JWT_SECRET);
-        
-        const user = await UserActivation.findById(decoded.id);
-        if(!user){
-             return res.status(404).json({message : "User not found"});
-        }
-        req.user = user;
-        next();
-    } catch (error) {
-        return res.status(401).json({message : "Invalid Token"});
+
+    if (!token) {
+      return res.status(401).json({ error: "Un-authorized" });
     }
-}
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded Token:", decoded);
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    req.user = user;
+    next();
+  } catch (error) {
+    console.error("Auth Middleware Error:", error.message);
+    return res.status(401).json({ error: "Invalid Token" });
+  }
+};
 
 module.exports = authMiddleware;

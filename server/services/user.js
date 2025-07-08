@@ -40,32 +40,37 @@ const login = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ error: "All fields are mandatory!!" });
     }
-    const checkUser = await User.findOne({ $or: [{ email }] });
-    if (checkUser) {
-      bcrypt.compare(password, checkUser.password, (err, data) => {
-        if (data) {
-          const token = jwt.sign(
-            { id: checkUser._id, email: checkUser.email },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-          );
-          res.cookie("taskifyUserToken", token, {
-            httpOnly: true,
-            maxAge: 30 * 24 * 60 * 60 * 1000,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-          });
 
-          return res.status(200).json({ success: "Login Successful" });
-        } else {
-          return res.status(400).json({ error: "Invalid credentials!!" });
-        }
-      });
+    const checkUser = await User.findOne({ email }); // simplified
+
+    if (!checkUser) {
+      return res.status(400).json({ error: "Invalid credentials!!" });
     }
+
+    const isMatch = await bcrypt.compare(password, checkUser.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "Invalid credentials!!" });
+    }
+
+    const token = jwt.sign(
+      { id: checkUser._id, email: checkUser.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.cookie("taskifyUserToken", token, {
+  httpOnly: true,
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  secure: false, // true only for HTTPS
+  sameSite: "Lax"
+});
+    return res.status(200).json({ success: "Login Successful" });
   } catch (error) {
-    return res.status(400).send("Internal server error!");
+    console.error("Login Error:", error);
+    return res.status(400).json({ error: "Internal server error!" });
   }
 };
+
 
 const logout = async (req, res) => {
   try {
@@ -98,16 +103,14 @@ const userDetails = async (req, res) => {
           completed.push(item);
         }
       });
-      return res
-        .status(200)
-        .json({
-          success: "success",
-          tasks: [{ yetToStart }, { inProgress }, { completed }],
-        });
+      return res.status(200).json({
+        success: "success",
+        tasks: [{ yetToStart }, { inProgress }, { completed }],
+      });
     }
   } catch (error) {
     return res.status(400).json({ error: "Internal Server error!" });
   }
 };
 
-module.exports = { register, login, logout, userDetails};
+module.exports = { register, login, logout, userDetails };

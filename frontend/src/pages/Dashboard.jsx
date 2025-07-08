@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import AddTask from "../components/Dashboard/AddTask";
 import StackTitle from "../components/Dashboard/StackTitle";
 import YetToStart from "../components/YetToStart";
 import Completed from "../components/completed";
 import InProgress from "../components/InProgress";
+import axios from "axios";
 
 const Dashboard = () => {
   const [AddTaskDiv, setAddTaskDiv] = useState("hidden");
+  const [tasks, setTasks] = useState();
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:8000/api/v1/userDetails",
+          {
+            withCredentials: true,
+          }
+        );
+
+        setTasks(res.data.tasks);
+      } catch (error) {}
+    };
+    fetchDetails();
+  }, [tasks]);
   return (
     <div className="w-full relative">
       <div className="bg-white">
@@ -15,22 +32,22 @@ const Dashboard = () => {
       </div>
       <div className="px-12 py-4 flex gap-12 bg-zinc-100 min-h[89vh] max-h-auto">
         <div className="w-1/3">
-           <StackTitle title={"Yet To Start"}/>
-           <div className="pt-2">
-            <YetToStart/>
-           </div>
+          <StackTitle title={"Yet To Start"} />
+          <div className="pt-2">
+            {tasks && <YetToStart task={tasks[0].yetToStart} />}
+          </div>
         </div>
         <div className="w-1/3">
-        <StackTitle title={"In Progress"}/>
-        <div className="pt-2"> 
-            <InProgress/>
-        </div>
+          <StackTitle title={"In Progress"} />
+          <div className="pt-2">
+            {tasks && <InProgress task={tasks[1].InProgress} />}
+          </div>
         </div>
         <div className="w-1/3">
-           <StackTitle title={"Completed"}/>
-           <div className="pt-2">
-              <Completed/>
-           </div>
+          <StackTitle title={"Completed"} />
+          <div className="pt-2">
+            {tasks && <Completed task={tasks[2].Completed} />}
+          </div>
         </div>
       </div>
 

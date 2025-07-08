@@ -1,9 +1,9 @@
-import React from 'react'
+import TaskCard from './Dashboard/TaskCard'
 
-const InProgress = () => {
+const InProgress = ({task}) => {
   return (
-    <div>
-      
+    <div className="flex flex-col gap-2">
+      {task && task.map((item, i) => <TaskCard key={i} data={item} />)}
     </div>
   )
 }

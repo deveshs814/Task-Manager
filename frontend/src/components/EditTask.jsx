@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
-const AddTask = ({ setAddTaskDiv }) => {
+const EditTask = (setEditTaskDiv) => {
   const [Values, setValues] = useState({
     title: "",
     description: "",
     priority: "low",
     status: "yetToStart",
   });
-
-  const change = (e) => {
-    const { name, value } = e.target;
-    setValues({ ...Values, [name]: value });
-  };
-
-  const addTask = async (e) => {
+  const editTask = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/addTask",
+        Values,
+        { withCredentials: true }
+      );
+      alert(res.data.success);
+      setValues({
+        title: "",
+        description: "",
+        priority: "low",
+        status: "yetToStart",
+      });
+    } catch (error) {
+      alert(error.response.data.error);
+    }
+  };const addTask = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post(
@@ -89,11 +101,17 @@ const AddTask = ({ setAddTaskDiv }) => {
             className="w-full bg-blue-800 hover:bg-blue-700 text-white transition-all duration-300  rounded"
             onClick={addTask}
           >
-            Add Task
+            Edit Task
+          </button>
+          <button
+            className="w-full border border-red-600 text-red-600  hover:bg-red-300 transition-all duration-300 rounded"
+            onClick={() => {}}
+          >
+            Delete Task
           </button>
           <button
             className="w-full border border-black hover:bg-zinc-100 transition-all duration-300 rounded"
-            onClick={() => setAddTaskDiv("hidden")}
+            onClick={() => setEditTaskDiv("hidden")}
           >
             Cancel
           </button>
@@ -103,4 +121,4 @@ const AddTask = ({ setAddTaskDiv }) => {
   );
 };
 
-export default AddTask;
+export default EditTask;

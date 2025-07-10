@@ -1,15 +1,23 @@
-const TaskCard = ({ data }) => {
+const TaskCard = ({ data, onEdit }) => {
+  const handleClick = (e) => {
+    e.preventDefault();
+    onEdit(data._id); // pass task ID to Dashboard
+  };
+
   return (
-    <div className="bg-white rounded px-4 w-full py-2 hover:shadow transition-all duration-300">
+    <div
+      className="bg-white rounded px-4 w-full py-2 hover:shadow transition-all duration-300"
+      onClick={handleClick}
+    >
       <div className="flex items-center justify-between">
         <h1>{data.title}</h1>
         <div
           className={`text-sm ${
-            data.priority === "low"
+            data.priority.toLowerCase() === "low"
               ? "text-green-500 bg-green-100"
-              : data.priority === "medium"
-              ? "text-yellow-500 bg-yellow-100"
-              : data.priority === "high"
+              : data.priority.toLowerCase() === "medium"
+              ? "text-yellow-600 bg-yellow-100"
+              : data.priority.toLowerCase() === "high"
               ? "text-red-500 bg-red-100"
               : ""
           } px-2 rounded-full`}
@@ -23,6 +31,4 @@ const TaskCard = ({ data }) => {
   );
 };
 
-
 export default TaskCard;
-

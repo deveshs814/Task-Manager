@@ -46,24 +46,37 @@ const editTask = async(req,res) =>{
     }
 }
 
-const getTask = async(req,res) =>{
-    try {
-        const {id} =  req.params;
-        const taskDetails = await task.findById(id);
-        return res.status(200).json({success : "Task Details"})
-    } catch (error) {
-        return res.status(404).json({error : "Internal server error"})
-    }
-}
+const getTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const taskDetails = await task.findById(id);
 
-const deleteTask = async(req,res) =>{
-    try {
-        const {id} =  req.params;
-        await task.findByIdAndDeleted(id);
-        return res.status(200).json({success : "Task Deleted"})
-    } catch (error) {
-        return res.status(404).json({error : "Internal server error"})
+    if (!taskDetails) {
+      return res.status(404).json({ error: "No task found with that ID" });
     }
-}
+
+    return res.status(200).json({ taskDetails }); // ✅ SEND the actual task
+  } catch (error) {
+    console.error("Error in getTask:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const deleteTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await task.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    return res.status(200).json({ success: "Task Deleted" });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {addTask,editTask, getTask,deleteTask}

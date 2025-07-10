@@ -1,11 +1,15 @@
 import TaskCard from './Dashboard/TaskCard';
 
-const YetToStart = ({ task }) => {
+
+const YetToStart = ({ task, onEdit }) => {
   return (
-    <div className="flex flex-col gap-2">
-      {task && task.map((item, i) => <TaskCard key={i} data={item} />)}
+    <div className="flex flex-col gap-3">
+      {task.map((t) => (
+        <TaskCard key={t._id} data={t} onEdit={onEdit} />
+      ))}
     </div>
   );
 };
 
 export default YetToStart;
+

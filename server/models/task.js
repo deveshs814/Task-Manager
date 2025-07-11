@@ -20,7 +20,12 @@ const taskSchema = mongoose.Schema({
         required:true,
         enum:["yetToStart","inProgress","completed"],
         default:"yetToStart"
-    }
+    },
+    user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true, // optional but good practice
+  },
 });
 
 module.exports = mongoose.model("task" ,taskSchema);

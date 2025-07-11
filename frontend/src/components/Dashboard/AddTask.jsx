@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 const AddTask = ({ setAddTaskDiv }) => {
@@ -23,7 +23,8 @@ const AddTask = ({ setAddTaskDiv }) => {
   { withCredentials: true }
 );
 
-      alert(res.data.success);
+      alert(res.data.success || "Task added");
+      window.location.reload();
       setValues({
         title: "",
         description: "",

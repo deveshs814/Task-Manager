@@ -21,10 +21,17 @@ const addTask = async (req, res) => {
         .json({ error: "Description must have atleast 6 characters" });
     }
 
-    const newTask = new task({ title, description, priority, status });
-    await newTask.save();
-    user.tasks.push(newTask._id);
-    await user.save();
+    const newTask = new task({
+  title,
+  description,
+  priority,
+  status,
+  user: user._id, // ✅ add this
+});
+await newTask.save();
+user.tasks.push(newTask._id);
+await user.save();
+
     return res.status(200).json({ success: "Task Added" });
   } catch (error) {
     return res.status(404).json({ error: "Internal server error" });

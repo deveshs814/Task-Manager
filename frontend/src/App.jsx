@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 
+axios.defaults.withCredentials = true;
 const App = () => {
   const navigate = useNavigate();
   useEffect(() =>{

@@ -61,8 +61,8 @@ const login = async (req, res) => {
     res.cookie("taskifyUserToken", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      secure: false, // true only for HTTPS
-      sameSite: "Lax",
+      secure: true, // true only for HTTPS
+      sameSite: "None",
     });
     return res.status(200).json({ success: "Login Successful" });
   } catch (error) {

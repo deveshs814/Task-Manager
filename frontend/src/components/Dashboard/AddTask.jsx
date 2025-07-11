@@ -57,7 +57,7 @@ const AddTask = ({ setAddTaskDiv }) => {
               value={Values.priority}
               onChange={change}
             >
-              <option value="Low">Low</option>
+              <option value="low">Low</option>
               <option value="Medium">Medium</option>
               <option value="High">High</option>
             </select>

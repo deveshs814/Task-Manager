@@ -5,7 +5,7 @@ import AddTask from "../components/Dashboard/AddTask";
 import StackTitle from "../components/Dashboard/StackTitle";
 import YetToStart from "../components/YetToStart";
 import InProgress from "../components/InProgress";
-import Completed from "../components/completed";
+import Completed from "../components/Completed";
 import EditTask from "../components/EditTask";
 
 const Dashboard = () => {

@@ -8,7 +8,6 @@ const Header = ({ setAddTaskDiv }) => {
     try {
       const res = await axios.post(
   `${import.meta.env.VITE_API_URL}/api/v1/logout`,
-  {},
   { withCredentials: true }
 );
 

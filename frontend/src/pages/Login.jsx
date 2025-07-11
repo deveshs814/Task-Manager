@@ -16,10 +16,11 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/v1/login",
-        Values,
-        { withCredentials: true }
-      );
+  `${import.meta.env.VITE_API_URL}/api/v1/login`,
+  Values,
+  { withCredentials: true }
+);
+
       localStorage.setItem("userLoggedIn","yes");
       navigate("/dashboard");
     } catch (error) {

@@ -17,9 +17,10 @@ const EditTask = ({ setEditTaskDiv, EditTaskId }) => {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/v1/getTask/${EditTaskId}`, {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/v1/getTask/${EditTaskId}`,
+          { withCredentials: true }
+        );
 
         if (res.data?.taskDetails) {
           setValues(res.data.taskDetails);
@@ -40,7 +41,7 @@ const EditTask = ({ setEditTaskDiv, EditTaskId }) => {
     e.preventDefault();
     try {
       const res = await axios.put(
-        `http://localhost:8000/api/v1/editTask/${Values._id}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/editTask/${Values._id}`,
         Values,
         { withCredentials: true }
       );
@@ -55,7 +56,7 @@ const EditTask = ({ setEditTaskDiv, EditTaskId }) => {
     e.preventDefault();
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/deleteTask/${Values._id}`,
+        `${import.meta.env.VITE_API_URL}/api/v1/deleteTask/${Values._id}`,
         { withCredentials: true }
       );
       alert(res.data.success);
@@ -114,29 +115,28 @@ const EditTask = ({ setEditTaskDiv, EditTaskId }) => {
           onChange={change}
         ></textarea>
         <div className="flex items-center justify-between gap-4">
-  <button
-    className="w-full bg-blue-800 hover:bg-blue-700 text-white transition-all duration-300 rounded"
-    onClick={(e) => editTask(e, EditTaskId)}
-  >
-    Edit Task
-  </button>
-  <button
-    className="w-full border border-red-600 text-red-600 hover:bg-red-300 transition-all duration-300 rounded"
-    onClick={(e) => deleteTask(e, EditTaskId)}
-  >
-    Delete Task
-  </button>
-  <button
-    className="w-full border border-black hover:bg-zinc-100 transition-all duration-300 rounded"
-    onClick={(e) => {
-      e.preventDefault();
-      setEditTaskDiv();
-    }}
-  >
-    Cancel
-  </button>
-</div>
-
+          <button
+            className="w-full bg-blue-800 hover:bg-blue-700 text-white transition-all duration-300 rounded"
+            onClick={(e) => editTask(e, EditTaskId)}
+          >
+            Edit Task
+          </button>
+          <button
+            className="w-full border border-red-600 text-red-600 hover:bg-red-300 transition-all duration-300 rounded"
+            onClick={(e) => deleteTask(e, EditTaskId)}
+          >
+            Delete Task
+          </button>
+          <button
+            className="w-full border border-black hover:bg-zinc-100 transition-all duration-300 rounded"
+            onClick={(e) => {
+              e.preventDefault();
+              setEditTaskDiv();
+            }}
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

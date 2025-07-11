@@ -16,9 +16,9 @@ const Dashboard = () => {
 
   const fetchDetails = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/userDetails", {
-        withCredentials: true,
-      });
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/userDetails`, {
+  withCredentials: true,
+});
       setTasks(res.data.tasks);
     } catch (error) {
       console.error("Error fetching tasks:", error);

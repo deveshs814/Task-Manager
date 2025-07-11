@@ -17,9 +17,10 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:/api/v1/register",
-        Values,
-      );
+  `${import.meta.env.VITE_API_URL}/api/v1/register`,
+  Values
+);
+
       alert(res.data.success);
       navigate("/login")
     } catch (error) {

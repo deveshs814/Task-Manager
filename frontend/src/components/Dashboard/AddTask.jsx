@@ -18,10 +18,11 @@ const AddTask = ({ setAddTaskDiv }) => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/v1/addTask",
-        Values,
-        { withCredentials: true }
-      );
+  `${import.meta.env.VITE_API_URL}/api/v1/addTask`,
+  Values,
+  { withCredentials: true }
+);
+
       alert(res.data.success);
       setValues({
         title: "",

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import Register from './pages/register';
+import Register from './pages/Register';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 

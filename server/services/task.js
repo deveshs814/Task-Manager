@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const task = require("../models/task");
 
 const addTask = async (req, res) => {
@@ -22,15 +24,15 @@ const addTask = async (req, res) => {
     }
 
     const newTask = new task({
-  title,
-  description,
-  priority,
-  status,
-  user: user._id, // ✅ add this
-});
-await newTask.save();
-user.tasks.push(newTask._id);
-await user.save();
+      title,
+      description,
+      priority,
+      status,
+      user: user._id, // ✅ add this
+    });
+    await newTask.save();
+    user.tasks.push(newTask._id);
+    await user.save();
 
     return res.status(200).json({ success: "Task Added" });
   } catch (error) {
@@ -87,18 +89,25 @@ const deleteTask = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deleted = await task.findByIdAndDelete(id);
-    if (!user) {
-      return res.status(401).json({ error: "User not authenticated" });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: "Invalid task ID" });
     }
+
+    const deleted = await task.findByIdAndDelete(id);
 
     if (!deleted) {
       return res.status(404).json({ error: "Task not found" });
     }
 
-    return res.status(200).json({ success: "Task Deleted" });
+    if (deleted.user) {
+      await User.findByIdAndUpdate(deleted.user, {
+        $pull: { tasks: deleted._id },
+      });
+    }
+
+    return res.status(200).json({ success: "Task Deleted Successfully" });
   } catch (error) {
-    console.error("Error deleting task:", error);
+    console.error("🔥 Error deleting task:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };

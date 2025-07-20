@@ -4,10 +4,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: 'dist', // Optional (default is 'dist', included for clarity)
+    outDir: 'dist',
   },
   server: {
-    port: 5173, // for local dev
+    port: 5173,
+    proxy: {
+      '/api': 'http://localhost:5000', // ✅ Correct proxy config
+    },
   },
-  base: '/', // ensures correct asset loading in Render static hosting
+  base: '/',
 })

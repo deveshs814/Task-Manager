@@ -51,20 +51,29 @@ const EditTask = ({ setEditTaskDiv, EditTaskId }) => {
       alert(error.response?.data?.error || "Error editing task");
     }
   };
+const deleteTask = async (e) => {
+  e.preventDefault();
 
-  const deleteTask = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/v1/deleteTask/${Values._id}`,
-        { withCredentials: true }
-      );
-      alert(res.data.success);
-      setEditTaskDiv();
-    } catch (error) {
-      alert(error.response?.data?.error || "Error deleting task");
-    }
-  };
+  if (!Values?._id) {
+    alert("❌ Task ID missing. Cannot delete.");
+    return;
+  }
+
+  try {
+    const res = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/api/v1/deleteTask/${Values._id}`,
+      { withCredentials: true }
+    );
+    console.log("✅ Delete response:", res.data);
+    alert(res.data.success);
+    setEditTaskDiv();
+  } catch (error) {
+    console.error("❌ Delete error:", error);
+    alert(error.response?.data?.error || "Error deleting task");
+  }
+};
+
+
 
   return (
     <div className="bg-white rounded px-4 py-4 w-[40%]">

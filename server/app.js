@@ -7,11 +7,11 @@ const userApis = require("./controllers/user")
 const taskApis = require("./controllers/task")
 const app = express();
 
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use(cors({
     origin:[
-        "https://task-manager-2-o9t3.onrender.com"
+        "http://localhost:5173"
     ],
     credentials:true,
 }));
